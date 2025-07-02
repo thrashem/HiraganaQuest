@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ひらがなクエスト | ひらがなのしょから　ふっかつする</title>
+  <style>
+    @font-face {
+      font-family: 'PixelMplus';
+      src: url('fonts/PixelMplus12-Regular.ttf') format('truetype');
+      font-display: swap;
+    }
+  body {
+    font-family: 'PixelMplus', monospace;
+    background: #000;
+    color: #fff;
+    font-size: 16px;
+    padding: 2em;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  input,
+  button {
+    font-family: inherit;
+    font-size: 1em;
+    padding: 0.5em;
+    margin-top: 0.7em;
+    width: 100%;
+    max-width: 360px;
+    box-sizing: border-box;
+  }
+
+  button:hover {
+    background: #333;
+  }
+
+  #result {
+    margin-top: 1.5em;
+    white-space: pre-wrap;
+  }
+  </style>
+</head>
+<body>
+  <h1>📜 ひらがなの　しょ</h1>
+
+  <form id="restoreForm">
+    <label for="spellInput">ふっかつの　ひらがな</label>
+    <input type="text" id="spellInput" placeholder="あのよろし……" maxlength="52" required spellcheck="false" />
+    <button type="submit">ふっかつする</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById("restoreForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const spell = document.getElementById("spellInput").value.trim();
+      result.textContent = "";
+
+      if (spell.length !== 52) {
+        result.textContent = "⚠️ 52もじ　にゅうりょくしてください";
+        return;
+      }
+
+      result.textContent = "⏳ しらべて　います…";
+
+try {
+  const res = await fetch(`/api/lookup/${spell}`);
+  if (res.ok) {
+    const data = await res.json();
+    const safeURL = data.url.replace(/"/g, "&quot;");
+    result.innerHTML = `✅ アドレスを　よくかくにんしてから　いくのだ！<br><a href="${safeURL}" target="_blank" rel="noopener noreferrer">${safeURL}</a>`;
+  } else {
+    result.textContent = "❌ ひらがなが　まちがっているようだ";
+  }
+} catch (err) {
+  result.textContent = "🚫 エラーが　はっせいしました";
+}
+
+    });
+  </script>
+  <p style="margin-top:2em;">
+    <button onclick="history.back()" style="
+      padding:0.5em 1em;
+      background:#222;
+      color:#fff;
+      border:1px solid #555;
+      border-radius:4px;
+      font-size:1em;
+    ">まえの　ページに　もどる</button>
+    </p>
+</body>
+</html>

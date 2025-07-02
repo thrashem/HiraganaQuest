@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ひらがなクエスト | ひらがなのしょに　きろくする</title>
+  <style>
+    @font-face {
+      font-family: 'PixelMplus';
+      src: url('fonts/PixelMplus12-Regular.ttf') format('truetype');
+      font-display: swap;
+    }
+    body {
+      font-family: 'PixelMplus', monospace;
+      background: #000;
+      color: #fff;
+      font-size: 16px;
+      padding: 2em;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input,
+    button {
+      font-family: inherit;
+      font-size: 1em;
+      padding: 0.5em;
+      margin-top: 0.7em;
+      width: 100%;
+      max-width: 360px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #222;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #333;
+    }
+    #result {
+      margin-top: 1.5em;
+      white-space: pre-wrap;
+    }
+    pre { background: #222; padding: 1em; font-size: 1.3em; white-space: pre-wrap; }
+    code { background: #333; padding: 0.5em; display: block; margin-top: 0.5em; }
+  </style>
+</head>
+<body>
+  <h1>📜 ひらがなの　しょ</h1>
+  <p>「ひらがなのしょに　サイトを　きろくしますか？」</p>
+
+  <form id="form">
+    <input type="text" id="urlInput" placeholder="https://example.com" required spellcheck="false" />
+    <button type="submit">きろくする</button>
+  </form>
+
+  <div id="result" style="margin-top:2em;"></div>
+
+  <script>
+    const form = document.getElementById("form");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const url = document.getElementById("urlInput").value.trim();
+      result.innerHTML = "⌛ じゅんび　しています……";
+
+      try {
+        const res = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url })
+        });
+
+        const contentType = res.headers.get("Content-Type") || "";
+        const isJson = contentType.includes("application/json");
+        const data = isJson ? await res.json() : await res.text();
+
+        if (!res.ok) {
+          result.innerHTML = `<p style="color:red;">🚫 なんか　エラー: ${typeof data === "string" ? data : data.error}</p>`;
+          return;
+        }
+
+        result.innerHTML = `
+          <p>「ふっかつのひらがなを しかと　きおくせよ」</p>
+          <pre><code>${data.display}</code></pre>
+          <p>🔖 このひらがなで「<a href="${data.url}" target="_blank">${data.url}</a>」へ　いどう　できます。</p>
+          <p>📋 コピペ用：</p>
+          <code>${data.spell}</code>
+        `;
+      } catch (err) {
+        result.innerHTML = `<p style="color:red;">🚫 なんか　エラー: ${err.message}</p>`;
+      }
+    });
+  </script>
+  <p style="margin-top:2em;">
+    <button onclick="history.back()" style="
+      padding:0.5em 1em;
+      background:#222;
+      color:#fff;
+      border:1px solid #555;
+      border-radius:4px;
+      font-size:1em;
+    ">まえの　ページに　もどる</button>
+    </p>
+</body>
+</html>

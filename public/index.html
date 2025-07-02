@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ひらがなクエスト</title>
+  <style>
+    @font-face {
+      font-family: 'PixelMplus';
+      src: url('fonts/PixelMplus12-Regular.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    body {
+      font-family: 'PixelMplus', monospace;
+      background: #000;
+      color: #fff;
+      font-size: 16px;
+      padding: 2em;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input,
+    button {
+      font-family: inherit;
+      font-size: 1em;
+      padding: 0.5em;
+      margin-top: 0.7em;
+      width: 100%;
+      max-width: 360px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #222;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    a.button {
+      display: inline-block;
+      margin: 1em;
+      padding: 0.6em 1.2em;
+      background: #222;
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid #555;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+
+    a.button:hover {
+      background: #333;
+    }
+
+    #result {
+      margin-top: 1.5em;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>ひらがなクエスト</h1>
+  <a class="button" href="encode.html">📜 ひらがなのしょに　きろくする</a><br />
+  <a class="button" href="decode.html">🧙‍♂️ ひらがなのしょから　ふっかつする</a>
+</body>
+</html>
