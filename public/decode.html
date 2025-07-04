@@ -73,7 +73,7 @@
       result.textContent = "⏳ しらべて　います…";
 
 try {
-  const res = await fetch(`/api/lookup/${spell}`);
+  const res = await fetch(`api/lookup/${spell}`);
   if (res.ok) {
     const data = await res.json();
     const safeURL = data.url.replace(/"/g, "&quot;");
